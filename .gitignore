@@ -1,0 +1,27 @@
+﻿# Visual Studio cache and user files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+
+# Logs
+*.log
+
+# Entity Framework migrations (optional)
+Migrations/
+
+# Rider IDE files (optional)
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# NuGet packages
+*.nupkg
+packages/

@@ -88,7 +88,7 @@ Date applied
 # ⚙️ Requirements
 Backend
 
-.NET 7 or later
+.NET 8 or later
 
 SQL Server (LocalDB or SQL Server Express)
 

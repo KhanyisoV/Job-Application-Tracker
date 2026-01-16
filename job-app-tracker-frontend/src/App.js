@@ -9,6 +9,7 @@ function App() {
   const [status,setStatus] = useState("Awaiting");
   const [description, setDescription] = useState("");
   const [editingId, setEditingId] = useState(null); // Track which item is being edited
+  const [sortBy, setSortBy] = useState("none");
 
   
   useEffect(() => {
@@ -114,6 +115,32 @@ const getStatusStyle = (status) => {
       return {};
   }
 };
+const getSortedApplications = () => {
+  const sorted = [...applications];
+  
+  switch(sortBy) {
+    case 'name-asc':
+      sorted.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case 'name-desc':
+      sorted.sort((a, b) => b.name.localeCompare(a.name));
+      break;
+    case 'status-asc':
+      // Accepted -> Awaiting -> Rejected
+      const orderAsc = { 'Accepted': 1, 'Awaiting': 2, 'Rejected': 3 };
+      sorted.sort((a, b) => (orderAsc[a.status] || 4) - (orderAsc[b.status] || 4));
+      break;
+    case 'status-desc':
+      // Rejected -> Awaiting -> Accepted
+      const orderDesc = { 'Rejected': 1, 'Awaiting': 2, 'Accepted': 3 };
+      sorted.sort((a, b) => (orderDesc[a.status] || 4) - (orderDesc[b.status] || 4));
+      break;
+    default:
+      return sorted;
+  }
+  
+  return sorted;
+};
 
 
   return (
@@ -152,8 +179,25 @@ const getStatusStyle = (status) => {
         <button onClick={createApplication}>Create</button>
       )}
 
+       {/* ADD THIS ENTIRE DIV: */}
+      <div className="sort-container">
+        <label htmlFor="sort-select">Sort by:</label>
+        <select 
+          id="sort-select"
+          className="sort-select"
+          value={sortBy} 
+          onChange={e => setSortBy(e.target.value)}
+        >
+          <option value="none">None</option>
+          <option value="name-asc">Name (A-Z)</option>
+          <option value="name-desc">Name (Z-A)</option>
+          <option value="status-asc">Status (Accepted → Awaiting → Rejected)</option>
+          <option value="status-desc">Status (Rejected → Awaiting → Accepted)</option>
+        </select>
+      </div>
+
       <ul>
-        {applications.map(application => (
+        {getSortedApplications().map(application => (
           <li key={application.jobId}>
             <h3>{application.name} </h3>
             <h4>{application.jobDescription}</h4>

@@ -44,6 +44,7 @@ namespace JobApplicationTracker.Controllers
         {
 
             jobapplication.JobId = 0;
+            jobapplication.AppliedDate = DateTime.Now;
             _context.JobApplications.Add(jobapplication);
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetJobApplication), new {id = jobapplication.JobId},jobapplication);
@@ -85,8 +86,5 @@ namespace JobApplicationTracker.Controllers
             return NoContent();
         }
 
-
-
-
     }
-}
+} 

@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Controllers\JobApplicationController.cs~RF77e01a4.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="C:\Users\khany\Desktop\BIT\Projects\JobApplicationTracker\.editorconfig" />
   </ItemGroup>
 

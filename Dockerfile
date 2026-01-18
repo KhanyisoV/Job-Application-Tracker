@@ -8,7 +8,8 @@ RUN dotnet restore
 
 # Copy everything else
 COPY . .
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet publish -c Release -o /app/publish --verbosity normal
+
 
 # Stage 2: runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0

@@ -10,6 +10,14 @@ builder.WebHost.ConfigureKestrel(options =>
 });
 
 // Add services to the container.
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    var connString = builder.Configuration.GetConnectionString("DefaultConnection")
+                     ?? Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+
+    options.UseSqlServer(connString);
+});
+
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

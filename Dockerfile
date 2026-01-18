@@ -1,16 +1,16 @@
-﻿# Stage 1: Build
+﻿# Stage 1: build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy csproj and restore
-COPY JobApplicationTracker/*.csproj ./ 
+COPY *.csproj ./
 RUN dotnet restore
 
-# Copy everything else and build
-COPY JobApplicationTracker/. ./
+# Copy everything else
+COPY . .
 RUN dotnet publish -c Release -o /app/publish
 
-# Stage 2: Runtime
+# Stage 2: runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/publish .

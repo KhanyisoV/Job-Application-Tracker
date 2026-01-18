@@ -21,7 +21,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp",
+    options.AddPolicy(
         policy =>
         {
             policy.WithOrigins("https://jobtracker-frontend-chd0d5hva6e3buh2.southafricanorth-01.azurewebsites.net/")
@@ -44,7 +44,7 @@ var app = builder.Build();
     app.UseSwaggerUI();
 
 
-app.UseCors("AllowReactApp");
+app.UseCors();
 
 app.UseHttpsRedirection();
 

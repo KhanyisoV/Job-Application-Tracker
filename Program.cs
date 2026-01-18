@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowReactApp",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000")
+            policy.WithOrigins("https://jobtracker-frontend-chd0d5hva6e3buh2.southafricanorth-01.azurewebsites.net/")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });

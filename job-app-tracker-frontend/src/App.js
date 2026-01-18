@@ -3,7 +3,7 @@ import './App.css';
 
 function App() {
 
-  const apiUrl = "http://localhost:5271/api/JobApplication";
+    const apiUrl = "https://jobtracker-backend-f7bxc9fyg4htendh.southafricanorth-01.azurewebsites.net/api";
   const [applications, setApplications] = useState([]);
   const [name,setName] = useState("");
   const [status,setStatus] = useState("Awaiting");

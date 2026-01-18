@@ -25,10 +25,11 @@ jobs:
 
       - name: Build & push backend image
         run: |
-          docker build -t ghcr.io/${{ github.actor }}/jobtracker-backend:latest .
-          docker push ghcr.io/${{ github.actor }}/jobtracker-backend:latest
+          docker build -t ghcr.io/khanyisov/jobtracker-backend:latest .
+          docker push ghcr.io/khanyisov/jobtracker-backend:latest
+
 
       - name: Build & push frontend image
         run: |
-          docker build -t ghcr.io/${{ github.actor }}/jobtracker-frontend:latest ./job-app-tracker-frontend
-          docker push ghcr.io/${{ github.actor }}/jobtracker-frontend:latest
+          docker build -t ghcr.io/khanyisov/jobtracker-frontend:latest ./job-app-tracker-frontend
+          docker push ghcr.io/khanyisov/jobtracker-frontend:latest

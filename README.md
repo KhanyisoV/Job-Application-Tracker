@@ -157,3 +157,7 @@ Deployment to cloud (Azure)
 # 📄 License
 
 This project is for educational and portfolio purposes.
+
+
+#URL
+https://jobtracker-frontend-chd0d5hva6e3buh2.southafricanorth-01.azurewebsites.net/

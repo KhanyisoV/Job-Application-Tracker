@@ -147,7 +147,7 @@ const getSortedApplications = () => {
     <div className="App">
       <h1>Job Application Tracker</h1>
 
-      <h2>Welcome to the Job Application Tracker!</h2>
+      <h2>Welcome to the Job Application Tracker!!</h2>
       <p>This is a simple application to help you track your job applications.</p>
       <h2>{editingId ? "Update" : "Create"} Job Application</h2>
 

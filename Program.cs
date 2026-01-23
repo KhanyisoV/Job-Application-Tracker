@@ -12,11 +12,16 @@ builder.WebHost.ConfigureKestrel(options =>
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    var connString = builder.Configuration.GetConnectionString("DefaultConnection")
-                     ?? Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+    var connString =
+        builder.Configuration.GetConnectionString("DefaultConnection")
+        ?? Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+
+    if (string.IsNullOrWhiteSpace(connString))
+        throw new Exception("SQL connection string not found");
 
     options.UseSqlServer(connString);
 });
+
 
 
 builder.Services.AddControllers()

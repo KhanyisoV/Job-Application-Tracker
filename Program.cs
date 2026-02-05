@@ -1,7 +1,6 @@
+using JobApplicationTracker.Controllers;
 using JobApplicationTracker.Data;
 using Microsoft.EntityFrameworkCore;
-using JobApplicationTracker.Controllers;
-
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
@@ -22,9 +21,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connString);
 });
 
-
-
-builder.Services.AddControllers()
+builder
+    .Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(
@@ -34,27 +32,37 @@ builder.Services.AddControllers()
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
+    options.AddPolicy(
+        "AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("https://jobtracker-frontend-chd0d5hva6e3buh2.southafricanorth-01.azurewebsites.net")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+            policy
+                .WithOrigins(
+                    "https://jobtracker-frontend-chd0d5hva6e3buh2.southafricanorth-01.azurewebsites.net",
+                    "http://localhost:3000", // Add for local testing
+                    "http://localhost:5173" // Add for local testing
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); // Add this if you need cookies/auth
+        }
+    );
 });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 
-
+// IMPORTANT: UseCors must come BEFORE UseHttpsRedirection
 app.UseCors("AllowFrontend");
 
-app.UseHttpsRedirection();
+// Comment this out if running on HTTP only
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

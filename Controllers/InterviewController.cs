@@ -28,10 +28,6 @@ namespace JobApplicationTracker.Controllers
         [HttpPost]
         public IActionResult CreateInterview(Interview interview)
         {
-            if (!_context.JobApplications.Any(j => j.JobId == interview.JobApplicationId))
-            {
-                return BadRequest("Job application not found");
-            }
             interview.Id = 0;
             _context.Interviews.Add(interview);
             _context.SaveChanges();

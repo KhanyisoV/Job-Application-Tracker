@@ -75,7 +75,7 @@ function createPrepNote() {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      jobApplicationId: selectedJobId,  // ADD THIS
+      jobApplicationId: selectedJobId,
       content: Question,
       notes: Answer
     })
@@ -234,7 +234,7 @@ function scheduleInterview() {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      jobApplicationId: selectedJobId,  // ADD THIS
+      jobApplicationId: selectedJobId,  
       date: interviewDate,
       time: interviewTime,
       location: interviewLocation,
@@ -477,44 +477,54 @@ const getSortedApplications = () => {
         <div className="tab-content">
           <h2>Interview Preparation</h2>
           <p>Prepare for your upcoming interviews with our resources and tips.</p>
-      
-        <input
-          type="text"
-          placeholder="Preparation Question"
-          value={Question}
-          onChange={e => setQuestion(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Answer"
-          value={Answer}
-          onChange={e => setAnswer(e.target.value)}
-        />
 
-        {editingInterviewId ? (
-          <>
-            <button onClick={() => updatePrepNote(editingInterviewId)}>Update Note</button>
-            <button onClick={cancelEditPrepNote}>Cancel</button>
-          </>
-        ) : (
-          <button onClick={createPrepNote}>Save Note</button>
-        )}
-        
-        <ul>
-          {savedNotes.map(note => (
-            <li key={note.id}>
-              <h3>{note.content}</h3>
-              <p>Answer: {note.notes}</p>
-              <button onClick={() => startEditPrepNote(note)}>Edit</button>
-              <button onClick={() => deletePrepNote(note.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
+          {/* ADD THIS DROPDOWN */}
+          <select
+            value={selectedJobId || ""}
+            onChange={e => setSelectedJobId(Number(e.target.value))}
+            required
+          >
+            <option value="">Select Job Application</option>
+            {applications.map(app => (
+              <option key={app.jobId} value={app.jobId}>
+                {app.name}
+              </option>
+            ))}
+          </select>
 
-        
+          <input
+            type="text"
+            placeholder="Preparation Question"
+            value={Question}
+            onChange={e => setQuestion(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Answer"
+            value={Answer}
+            onChange={e => setAnswer(e.target.value)}
+          />
+
+          {editingInterviewId ? (
+            <>
+              <button onClick={() => updatePrepNote(editingInterviewId)}>Update Note</button>
+              <button onClick={cancelEditPrepNote}>Cancel</button>
+            </>
+          ) : (
+            <button onClick={createPrepNote}>Save Note</button>
+          )}
+          
+          <ul>
+            {savedNotes.map(note => (
+              <li key={note.id}>
+                <h3>{note.content}</h3>
+                <p>Answer: {note.notes}</p>
+                <button onClick={() => startEditPrepNote(note)}>Edit</button>
+                <button onClick={() => deletePrepNote(note.id)}>Delete</button>
+              </li>
+            ))}
+          </ul>
         </div>
-        
-        
       )}
 
       {/* Job Details Tab */}
@@ -568,6 +578,20 @@ const getSortedApplications = () => {
       {activeTab === "interviews" && (
         <div className="tab-content">
           <h2>{editingInterviewId ? "Update" : "Schedule"} Interview</h2>
+
+          {/* ADD THIS DROPDOWN */}
+          <select
+            value={selectedJobId || ""}
+            onChange={e => setSelectedJobId(Number(e.target.value))}
+            required
+          >
+            <option value="">Select Job Application</option>
+            {applications.map(app => (
+              <option key={app.jobId} value={app.jobId}>
+                {app.name}
+              </option>
+            ))}
+          </select>
 
           <input
             type="date"

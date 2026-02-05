@@ -115,7 +115,7 @@ function cancelEdit() {
 
  {/* Interview section functions */}
 function scheduleInterview() {
-  fetch(apiInterviewUrl + "/interview", {
+  fetch(apiInterviewUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -149,7 +149,7 @@ function cancelInterview(id) {
 }     
 
 function updateInterview(id) {
-  fetch(`${apiInterviewUrl +  "/interview"} /${id}`, {
+  fetch(`${apiInterviewUrl}/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"

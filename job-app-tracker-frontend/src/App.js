@@ -27,7 +27,7 @@ function App() {
   
 
   useEffect(() => {
-    fetch(apiUrl + "/interview").then(response => response.json())
+    fetch(apiInterviewUrl + "/interview").then(response => response.json())
       .then(data => setInterviews(data))
       .catch(err => console.error(err));
   }, []);
@@ -74,7 +74,7 @@ function deleteApplication(id) {
 }
 
 function updateApplication(id) {
-  fetch(`${apiUrl}/${id}`, {
+  fetch(`${apiUrl}/interview/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -115,7 +115,7 @@ function cancelEdit() {
 
  {/* Interview section functions */}
 function scheduleInterview() {
-  fetch(apiInterviewUrl, {
+  fetch(apiInterviewUrl + "/interview", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -149,7 +149,7 @@ function cancelInterview(id) {
 }     
 
 function updateInterview(id) {
-  fetch(`${apiInterviewUrl} /${id}`, {
+  fetch(`${apiInterviewUrl +  "/interview"} /${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"

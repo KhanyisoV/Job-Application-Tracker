@@ -5,6 +5,8 @@ function App() {
 
   {/*For The jobapplication Tracker dashboard */}
   const apiUrl = "https://jobtracker-backend-f7bxc9fyg4htendh.southafricanorth-01.azurewebsites.net/api/JobApplication";
+
+  const apiInterviewUrl = "https://jobtracker-backend-f7bxc9fyg4htendh.southafricanorth-01.azurewebsites.net/api/Interview";
   const [applications, setApplications] = useState([]);
   const [name,setName] = useState("");
   const [status,setStatus] = useState("Awaiting");
@@ -25,7 +27,7 @@ function App() {
   
 
   useEffect(() => {
-    fetch(apiUrl + "/interviews").then(response => response.json())
+    fetch(apiUrl + "/interview").then(response => response.json())
       .then(data => setInterviews(data))
       .catch(err => console.error(err));
   }, []);
@@ -113,7 +115,7 @@ function cancelEdit() {
 
  {/* Interview section functions */}
 function scheduleInterview() {
-  fetch(apiUrl + "/interviews", {
+  fetch(apiInterviewUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -137,7 +139,7 @@ function scheduleInterview() {
 }
 
 function cancelInterview(id) {
-  fetch(`${apiUrl}/interviews/${id}`, {
+  fetch(`${apiInterviewUrl}/${id}`, {
     method: "DELETE"
   })
   .then(() => {
@@ -147,7 +149,7 @@ function cancelInterview(id) {
 }     
 
 function updateInterview(id) {
-  fetch(`${apiUrl}/interviews/${id}`, {
+  fetch(`${apiInterviewUrl} /${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"

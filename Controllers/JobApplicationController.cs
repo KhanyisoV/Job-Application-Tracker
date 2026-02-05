@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using JobApplicationTracker.Data;
 using JobApplicationTracker.Models;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
-using JobApplicationTracker.Data;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobApplicationTracker.Controllers
 {
@@ -12,6 +12,7 @@ namespace JobApplicationTracker.Controllers
     public class JobApplicationController : ControllerBase
     {
         private readonly AppDbContext _context;
+
         public JobApplicationController(AppDbContext context)
         {
             this._context = context;
@@ -42,25 +43,27 @@ namespace JobApplicationTracker.Controllers
         [HttpPost]
         public IActionResult CreateJobApplication(JobApplication jobapplication)
         {
-
             jobapplication.JobId = 0;
             jobapplication.AppliedDate = DateTime.Now;
             _context.JobApplications.Add(jobapplication);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(GetJobApplication), new {id = jobapplication.JobId},jobapplication);
+            return CreatedAtAction(
+                nameof(GetJobApplication),
+                new { id = jobapplication.JobId },
+                jobapplication
+            );
         }
 
         // Updates job application
 
         [HttpPut("{id}")]
-        public IActionResult UpdateApplication(int id,JobApplication jobApplication)
+        public IActionResult UpdateApplication(int id, JobApplication jobApplication)
         {
             var existing = _context.JobApplications.Find(id);
             if (existing == null)
             {
-                return BadRequest( BadRequest("Does not exist") );
+                return BadRequest(BadRequest("Does not exist"));
             }
-            
 
             existing.JobDescription = jobApplication.JobDescription;
             existing.Name = jobApplication.Name;
@@ -70,14 +73,13 @@ namespace JobApplicationTracker.Controllers
             return NoContent();
         }
 
-
         // Deletes Job application
 
         [HttpDelete("{id}")]
         public IActionResult DeleteJobApplication(int id)
         {
-            var exist =_context.JobApplications.Find(id);
-            if(exist == null)
+            var exist = _context.JobApplications.Find(id);
+            if (exist == null)
             {
                 return NotFound();
             }
@@ -85,6 +87,5 @@ namespace JobApplicationTracker.Controllers
             _context.SaveChanges();
             return NoContent();
         }
-
     }
-} 
+}

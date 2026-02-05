@@ -56,9 +56,53 @@ p {
   font-weight: 300;
 }
 
+/* Tab Navigation */
+.tab-navigation {
+  max-width: 500px;
+  margin: 3rem auto 2rem;
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 1rem 2rem;
+  border: none;
+  background: transparent;
+  color: #999;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  border-bottom: 2px solid transparent;
+  margin: 0;
+  border-radius: 0;
+}
+
+.tab-button:hover {
+  color: #666;
+  background: transparent;
+}
+
+.tab-button.active {
+  color: #1a1a1a;
+  background: transparent;
+  border-bottom: 2px solid #1a1a1a;
+}
+
+.tab-content {
+  animation: fadeIn 0.4s ease-out;
+}
+
 /* Form Section */
 .App > input,
-.App > select {
+.App > select,
+.tab-content input,
+.tab-content select {
   width: 100%;
   max-width: 500px;
   margin: 0 auto 1rem;
@@ -74,18 +118,22 @@ p {
 }
 
 .App > input:focus,
-.App > select:focus {
+.App > select:focus,
+.tab-content input:focus,
+.tab-content select:focus {
   outline: none;
   border-color: #1a1a1a;
   box-shadow: none;
 }
 
-.App > input::placeholder {
+.App > input::placeholder,
+.tab-content input::placeholder {
   color: #999;
   font-weight: 300;
 }
 
-.App > select {
+.App > select,
+.tab-content select {
   cursor: pointer;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%231a1a1a' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
@@ -112,14 +160,16 @@ button {
   font-family: 'Inter', sans-serif;
 }
 
-.App > button {
+.App > button,
+.tab-content > button {
   display: block;
   margin: 2rem auto;
   max-width: 500px;
   width: 100%;
 }
 
-.App > button:hover {
+.App > button:hover,
+.tab-content > button:hover {
   background: white;
   color: #1a1a1a;
 }
@@ -231,14 +281,16 @@ li button:last-of-type:hover {
 }
 
 /* Form Buttons Container */
-.App > button:nth-of-type(2) {
+.App > button:nth-of-type(2),
+.tab-content > button:nth-of-type(2) {
   margin-top: 0.5rem;
   background: white;
   color: #666;
   border-color: #d0d0d0;
 }
 
-.App > button:nth-of-type(2):hover {
+.App > button:nth-of-type(2):hover,
+.tab-content > button:nth-of-type(2):hover {
   background: #f5f5f5;
   color: #1a1a1a;
   border-color: #1a1a1a;
@@ -246,7 +298,7 @@ li button:last-of-type:hover {
 
 /* Empty State */
 ul:empty::after {
-  content: "No applications yet. Start tracking your job search above.";
+  content: "No items yet. Add one using the form above.";
   display: block;
   grid-column: 1 / -1;
   text-align: center;
@@ -268,6 +320,11 @@ ul:empty::after {
 
   h2 {
     font-size: 1.5rem;
+  }
+
+  .tab-button {
+    padding: 0.875rem 1rem;
+    font-size: 0.85rem;
   }
 
   ul {

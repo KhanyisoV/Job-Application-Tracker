@@ -28,8 +28,21 @@ jobs:
           docker build -t ghcr.io/khanyisov/jobtracker-backend:latest .
           docker push ghcr.io/khanyisov/jobtracker-backend:latest
 
-
       - name: Build & push frontend image
         run: |
           docker build -t ghcr.io/khanyisov/jobtracker-frontend:latest ./job-app-tracker-frontend
           docker push ghcr.io/khanyisov/jobtracker-frontend:latest
+
+      # ADD THESE STEPS:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Restart Frontend Web App
+        run: |
+          az webapp restart --name jobtracker-frontend --resource-group jobtracker-rg
+
+      - name: Restart Backend Web App
+        run: |
+          az webapp restart --name jobtracker-backend-f7bxc9fyg4htendh --resource-group jobtracker-rg

@@ -29,6 +29,7 @@ namespace JobApplicationTracker.Models
 
         public DateTime? AppliedDate { get; set; }
 
-        public List<Interview>? Interviews { get; set; }
+        public List<Interview>? Interviews { get; set; } = new List<Interview>();
+        public List<InterviewPrep>? InterviewPreps { get; set; } = new List<InterviewPrep>();
     }
 }

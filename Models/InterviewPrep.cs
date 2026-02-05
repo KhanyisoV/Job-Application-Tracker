@@ -11,5 +11,7 @@ namespace JobApplicationTracker.Models
         public string? Question { get; set; }
         public string? Answer { get; set; }
         public DateTime? PreparedDate { get; set; }
+        public int JobApplicationId { get; set; }
+        public JobApplication JobApplication { get; set; }
     }
 }

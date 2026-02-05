@@ -21,6 +21,20 @@ namespace JobApplicationTracker.Data
             modelBuilder.Entity<Interview>().Property(i => i.InterviewType).HasConversion<string>();
 
             modelBuilder.Entity<InterviewPrep>().Property(ip => ip.Question).HasMaxLength(500);
+
+            modelBuilder
+                .Entity<Interview>()
+                .HasOne(i => i.JobApplication)
+                .WithMany(j => j.Interviews)
+                .HasForeignKey(i => i.JobApplicationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder
+                .Entity<InterviewPrep>()
+                .HasOne(ip => ip.JobApplication)
+                .WithMany(j => j.InterviewPreps)
+                .HasForeignKey(ip => ip.JobApplicationId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

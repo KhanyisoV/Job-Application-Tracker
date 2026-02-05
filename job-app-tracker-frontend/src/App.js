@@ -36,6 +36,9 @@ function App() {
   {/*for Tab Navigation*/}
   const [activeTab, setActiveTab] = useState("applications");
   
+ const [selectedJobId, setSelectedJobId] = useState(null);
+ const [selectedJob, setSelectedJob] = useState(null);
+
 
   {/* Fetch interviews on component mount */}
   useEffect(() => {
@@ -60,13 +63,19 @@ function App() {
 
  {/*Interview prep*/}
 
- function createPrepNote() {
-  fetch(apiInterviewPrepUrl , {
+function createPrepNote() {
+  if (!selectedJobId) {
+    alert("Please select a job application first");
+    return;
+  }
+  
+  fetch(apiInterviewPrepUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
+      jobApplicationId: selectedJobId,  // ADD THIS
       content: Question,
       notes: Answer
     })
@@ -128,6 +137,17 @@ function cancelEditPrepNote() {
 
 
 {/*Job application functions*/}
+
+function viewJobDetails(jobId) {
+  fetch(`${apiUrl}/${jobId}`)
+    .then(res => res.json())
+    .then(data => {
+      setSelectedJob(data);
+      setSelectedJobId(jobId);
+      setActiveTab("job-details");
+    })
+    .catch(err => console.error(err));
+}
  function createApplication() {
   fetch(apiUrl, {
     method: "POST",
@@ -203,12 +223,18 @@ function cancelEdit() {
 
  {/* Interview section functions */}
 function scheduleInterview() {
+  if (!selectedJobId) {
+    alert("Please select a job application first");
+    return;
+  }
+  
   fetch(apiInterviewUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
+      jobApplicationId: selectedJobId,  // ADD THIS
       date: interviewDate,
       time: interviewTime,
       location: interviewLocation,
@@ -340,6 +366,20 @@ const getSortedApplications = () => {
       
       {/* Tab Navigation */}
       <div className="tab-navigation">
+
+        <button 
+          className={`tab-button ${activeTab === "job-details" ? "active" : ""}`}
+          onClick={() => {
+            if (selectedJobId) {
+              viewJobDetails(selectedJobId);
+            } else {
+              alert("Please select a job application first");
+            }
+          }}
+          disabled={!selectedJobId}
+        >
+          Job Details
+        </button>
         <button 
           className={`tab-button ${activeTab === "applications" ? "active" : ""}`}
           onClick={() => setActiveTab("applications")}
@@ -424,6 +464,8 @@ const getSortedApplications = () => {
                                 }</p>
                 <button onClick={() => startEdit(application)}>Edit</button>
                 <button onClick={() => deleteApplication(application.jobId)}>Delete</button>
+                {/* ADD THIS NEW BUTTON: */}
+                <button onClick={() => viewJobDetails(application.jobId)}>View Details</button>
               </li>
             ))}
           </ul>
@@ -473,6 +515,53 @@ const getSortedApplications = () => {
         </div>
         
         
+      )}
+
+      {/* Job Details Tab */}
+      {activeTab === "job-details" && selectedJob && (
+        <div className="tab-content">
+          <button onClick={() => {
+            setActiveTab("applications");
+            setSelectedJob(null);
+            setSelectedJobId(null);
+          }}>← Back to Applications</button>
+          
+          <h2>{selectedJob.name}</h2>
+          <p>{selectedJob.jobDescription}</p>
+          <p style={getStatusStyle(selectedJob.status)}>Status: {selectedJob.status}</p>
+          
+          <h3>Interviews ({selectedJob.interviews?.length || 0})</h3>
+          <ul>
+            {selectedJob.interviews?.map(interview => (
+              <li key={interview.id}>
+                <h4>{new Date(interview.date).toLocaleDateString()}</h4>
+                <p>Time: {interview.time}</p>
+                <p>Location: {interview.location}</p>
+                <p>Notes: {interview.notes}</p>
+                <button onClick={() => {
+                  setActiveTab("interviews");
+                  startEditInterview(interview);
+                }}>Edit</button>
+                <button onClick={() => cancelInterview(interview.id)}>Delete</button>
+              </li>
+            ))}
+          </ul>
+          
+          <h3>Interview Prep ({selectedJob.interviewPreps?.length || 0})</h3>
+          <ul>
+            {selectedJob.interviewPreps?.map(prep => (
+              <li key={prep.id}>
+                <h4>{prep.content}</h4>
+                <p>Answer: {prep.notes}</p>
+                <button onClick={() => {
+                  setActiveTab("interview-prep");
+                  startEditPrepNote(prep);
+                }}>Edit</button>
+                <button onClick={() => deletePrepNote(prep.id)}>Delete</button>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
 
       {/* Interviews Tab */}

@@ -10,8 +10,8 @@ namespace JobApplicationTracker.Models
         public string? Location { get; set; }
         public DateTime? InterviewDate { get; set; }
 
-        public JobApplication? JobApplication { get; set; }
-        public int? JobApplicationId { get; set; }
+        public JobApplication JobApplication { get; set; }
+        public int JobApplicationId { get; set; }
         public string? InterviewType { get; set; }
     }
 }

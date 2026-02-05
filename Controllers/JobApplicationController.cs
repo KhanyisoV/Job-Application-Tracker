@@ -26,11 +26,14 @@ namespace JobApplicationTracker.Controllers
             return Ok(jobApplications);
         }
 
-        //gets a single job application
         [HttpGet("{id}")]
         public IActionResult GetJobApplication(int id)
         {
-            var jobApplication = _context.JobApplications.Find(id);
+            var jobApplication = _context
+                .JobApplications.Include(j => j.Interviews)
+                .Include(j => j.InterviewPreps)
+                .FirstOrDefault(j => j.JobId == id);
+
             if (jobApplication == null)
             {
                 return NotFound();

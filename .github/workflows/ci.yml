@@ -45,4 +45,4 @@ jobs:
 
       - name: Restart Backend Web App
         run: |
-          az webapp restart --name jobtracker-backend-f7bxc9fyg4htendh --resource-group jobtracker-rg
+          az webapp restart --name jobtracker-backend --resource-group jobtracker-rg

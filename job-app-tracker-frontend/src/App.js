@@ -234,11 +234,11 @@ function scheduleInterview() {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      jobApplicationId: selectedJobId,  
+      
       date: interviewDate,
       time: interviewTime,
       location: interviewLocation,
-      notes: interviewNotes
+      
     })
   })
   .then(res => res.json())

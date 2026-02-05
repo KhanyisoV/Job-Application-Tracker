@@ -30,8 +30,6 @@ builder
         );
     });
 
-    
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(

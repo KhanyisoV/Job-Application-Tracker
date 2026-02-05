@@ -7,6 +7,8 @@ function App() {
   const apiUrl = "https://jobtracker-backend-f7bxc9fyg4htendh.southafricanorth-01.azurewebsites.net/api/JobApplication";
 
   const apiInterviewUrl = "https://jobtracker-backend-f7bxc9fyg4htendh.southafricanorth-01.azurewebsites.net/api/Interview";
+
+  const apiInterviewPrepUrl = "https://jobtracker-backend-f7bxc9fyg4htendh.southafricanorth-01.azurewebsites.net/api/InterviewPrep";
   const [applications, setApplications] = useState([]);
   const [name,setName] = useState("");
   const [status,setStatus] = useState("Awaiting");
@@ -21,25 +23,111 @@ function App() {
   const [interviewLocation, setInterviewLocation] = useState("");
   const [interviewNotes, setInterviewNotes] = useState("");
   const [editingInterviewId, setEditingInterviewId] = useState(null);
+
+  {/*for interview preparation*/}
+  const [activePrepTab, setActivePrepTab] = useState("resources");
+  const [prepContent, setPrepContent] = useState("");
+  const [prepNotes, setPrepNotes] = useState("");
+  const [savedNotes, setSavedNotes] = useState([]);
+  const [Question, setQuestion] = useState("");
+  const [Answer, setAnswer] = useState("");
+
   
   {/*for Tab Navigation*/}
   const [activeTab, setActiveTab] = useState("applications");
   
 
+  {/* Fetch interviews on component mount */}
   useEffect(() => {
     fetch(apiInterviewUrl + "/interview").then(response => response.json())
       .then(data => setInterviews(data))
       .catch(err => console.error(err));
   }, []);
   
-  
+  {/* Fetch applications on component mount */}
   useEffect(() => {
     fetch(apiUrl).then(response => response.json())
     .then(data => setApplications(data))
     .catch(error => console.error(error));
   }, []);
 
+  {/* Fetch interview preparation content on component mount */}
+  useEffect(() => {
+    fetch(apiInterviewPrepUrl + "/interview-preps").then(response => response.json())
+      .then(data => setSavedNotes(data))
+      .catch(err => console.error(err));
+  }, []);
 
+ {/*Interview prep*/}
+
+ function createPrepNote() {
+  fetch(apiInterviewPrepUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      content: Question,
+      notes: Answer
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    setSavedNotes([...savedNotes, data]);
+    setQuestion("");
+    setAnswer("");
+  })
+  .catch(err => console.error(err));
+}
+
+function deletePrepNote(id) {
+  fetch(`${apiInterviewPrepUrl}/${id}`, {
+    method: "DELETE"
+  })
+  .then(() => {
+    setSavedNotes(savedNotes.filter(note => note.id !== id));
+  })
+  .catch(err => console.error(err));
+}
+
+function updatePrepNote(id) {
+  fetch(`${apiInterviewPrepUrl}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      content: Question,
+      notes: Answer
+    })
+  })
+  .then(() => {
+    setSavedNotes(savedNotes.map(note => 
+      note.id === id 
+        ? {...note, content: Question, notes: Answer} 
+        : note
+    ));
+    setQuestion("");
+    setAnswer("");
+    setEditingInterviewId(null);
+  })
+  .catch(err => console.error(err));
+}
+
+function startEditPrepNote(note) {
+  setQuestion(note.content);
+  setAnswer(note.notes);
+  setEditingInterviewId(note.id);
+}
+
+function cancelEditPrepNote() {
+  setQuestion("");
+  setAnswer("");
+  setEditingInterviewId(null);
+} 
+
+
+{/*Job application functions*/}
  function createApplication() {
   fetch(apiUrl, {
     method: "POST",
@@ -74,7 +162,7 @@ function deleteApplication(id) {
 }
 
 function updateApplication(id) {
-  fetch(`${apiUrl}/interview/${id}`, {
+  fetch(`${apiUrl}/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -247,7 +335,7 @@ const getSortedApplications = () => {
   return (
     <div className="App">
       <h1>Job Application Tracker</h1>
-      <h2>Welcome to the Job Application Tracker!!</h2>
+      <h2>Welcome to the Job Application Tracker!</h2>
       <p>This is a simple application to help you track your job applications.</p>
       
       {/* Tab Navigation */}
@@ -263,6 +351,13 @@ const getSortedApplications = () => {
           onClick={() => setActiveTab("interviews")}
         >
           Interviews
+        </button>
+
+         <button 
+          className={`tab-button ${activeTab === "interview-prep" ? "active" : ""}`}
+          onClick={() => setActiveTab("interview-prep")}
+        >
+          Interview Prep
         </button>
       </div>
 
@@ -333,6 +428,51 @@ const getSortedApplications = () => {
             ))}
           </ul>
         </div>
+      )}
+
+      {/* Interview Prep Tab */}
+      {activeTab === "interview-prep" && (
+        <div className="tab-content">
+          <h2>Interview Preparation</h2>
+          <p>Prepare for your upcoming interviews with our resources and tips.</p>
+      
+        <input
+          type="text"
+          placeholder="Preparation Question"
+          value={Question}
+          onChange={e => setQuestion(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Answer"
+          value={Answer}
+          onChange={e => setAnswer(e.target.value)}
+        />
+
+        {editingInterviewId ? (
+          <>
+            <button onClick={() => updatePrepNote(editingInterviewId)}>Update Note</button>
+            <button onClick={cancelEditPrepNote}>Cancel</button>
+          </>
+        ) : (
+          <button onClick={createPrepNote}>Save Note</button>
+        )}
+        
+        <ul>
+          {savedNotes.map(note => (
+            <li key={note.id}>
+              <h3>{note.content}</h3>
+              <p>Answer: {note.notes}</p>
+              <button onClick={() => startEditPrepNote(note)}>Edit</button>
+              <button onClick={() => deletePrepNote(note.id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+
+        
+        </div>
+        
+        
       )}
 
       {/* Interviews Tab */}

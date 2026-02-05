@@ -7,82 +7,102 @@ using Microsoft.EntityFrameworkCore;
 namespace JobApplicationTracker.Controllers
 {
     [ApiController]
-    [Route("/api")]
-    public class InterviewPrepController : Controller
+    [Route("api/[controller]")] // This creates /api/InterviewPrep
+    public class InterviewPrepController : ControllerBase // Changed from Controller to ControllerBase
     {
-        public readonly AppDbContext _context;
+        private readonly AppDbContext _context;
 
         public InterviewPrepController(AppDbContext context)
         {
             _context = context;
         }
 
-        // Get all Interviewpreps
+        // GET: api/InterviewPrep
         [HttpGet]
-        public IActionResult getInterviews()
+        public async Task<IActionResult> GetInterviewPreps()
         {
-            var interviewsPrep = _context.InterviewPreps.ToList();
-            return Ok(interviewsPrep);
+            var interviewPreps = await _context.InterviewPreps.ToListAsync();
+            return Ok(interviewPreps);
         }
 
-        // Get a specific interview prep using Id
+        // GET: api/InterviewPrep/5
         [HttpGet("{id}")]
-        public IActionResult getInterview(int id)
+        public async Task<IActionResult> GetInterviewPrep(int id)
         {
-            var exist = _context.InterviewPreps.Find(id);
-            if (exist == null)
+            var interviewPrep = await _context.InterviewPreps.FindAsync(id);
+
+            if (interviewPrep == null)
             {
                 return NotFound();
             }
 
-            return Ok(exist);
+            return Ok(interviewPrep);
         }
 
-        //Update an InterviewPrep using Id
-
-        [HttpPut("id")]
-        public IActionResult UpdateInterview(int id, InterviewPrep interviewPrep)
+        // POST: api/InterviewPrep
+        [HttpPost]
+        public async Task<IActionResult> CreateInterviewPrep([FromBody] InterviewPrep interviewPrep)
         {
-            var exist = _context.InterviewPreps.Find(id);
-            if (exist == null)
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            interviewPrep.Id = 0; // Ensure new record
+            interviewPrep.PreparedDate = DateTime.UtcNow;
+
+            _context.InterviewPreps.Add(interviewPrep);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(
+                nameof(GetInterviewPrep),
+                new { id = interviewPrep.Id },
+                interviewPrep
+            );
+        }
+
+        // PUT: api/InterviewPrep/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateInterviewPrep(
+            int id,
+            [FromBody] InterviewPrep interviewPrep
+        )
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var existing = await _context.InterviewPreps.FindAsync(id);
+
+            if (existing == null)
             {
                 return NotFound();
             }
 
-            exist.PreparedDate = DateTime.UtcNow;
-            exist.Question = interviewPrep.Question;
-            exist.Answer = interviewPrep.Answer;
+            existing.Question = interviewPrep.Question;
+            existing.Answer = interviewPrep.Answer;
+            existing.PreparedDate = DateTime.UtcNow;
 
-            _context.SaveChanges();
-            return NoContent();
+            await _context.SaveChangesAsync();
+
+            return Ok(existing);
         }
 
-        //Delete an InterviewPrep using Id
-
-        [HttpDelete]
-        public IActionResult DeleteInterview(int id)
+        // DELETE: api/InterviewPrep/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteInterviewPrep(int id)
         {
-            var exist = _context.InterviewPreps.Find(id);
-            if (exist == null)
+            var interviewPrep = await _context.InterviewPreps.FindAsync(id);
+
+            if (interviewPrep == null)
             {
-                return BadRequest(BadRequest("Does not exist"));
+                return NotFound();
             }
 
-            _context.Remove(exist);
-            _context.SaveChanges();
-            return NoContent();
-        }
+            _context.InterviewPreps.Remove(interviewPrep);
+            await _context.SaveChangesAsync();
 
-        // Create an InterviewPrep
-        [HttpPut]
-        public IActionResult CreateInterview(int id, InterviewPrep interviewPrep)
-        {
-            interviewPrep.Id = 0;
-            _context.Add(interviewPrep.Answer);
-            _context.Add(interviewPrep.Question);
-            interviewPrep.PreparedDate = DateTime.Now;
-
-            _context.SaveChanges();
             return NoContent();
         }
     }

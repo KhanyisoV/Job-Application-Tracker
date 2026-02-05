@@ -18,7 +18,7 @@ namespace JobApplicationTracker.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("interviews")]
         public IActionResult GetInterviews()
         {
             var interviews = _context.Interviews.ToList();

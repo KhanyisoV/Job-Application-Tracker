@@ -53,7 +53,7 @@ function App() {
 
   {/* Fetch interview preparation content on component mount */}
   useEffect(() => {
-    fetch(apiInterviewPrepUrl + "/interview-preps").then(response => response.json())
+    fetch(apiInterviewPrepUrl).then(response => response.json())
       .then(data => setSavedNotes(data))
       .catch(err => console.error(err));
   }, []);
@@ -61,7 +61,7 @@ function App() {
  {/*Interview prep*/}
 
  function createPrepNote() {
-  fetch(apiInterviewPrepUrl, {
+  fetch(apiInterviewPrepUrl , {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

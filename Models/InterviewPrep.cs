@@ -8,11 +8,11 @@ namespace JobApplicationTracker.Models
         public int Id { get; set; }
 
         public int JobApplicationId { get; set; }
-        public JobApplication JobApplication { get; set; }
+        public JobApplication? JobApplication { get; set; }
 
         // Match frontend field names
-        public string? Content { get; set; }  // Changed from Question
-        public string? Notes { get; set; }    // Changed from Answer
+        public string? Content { get; set; } // Changed from Question
+        public string? Notes { get; set; } // Changed from Answer
         public DateTime PreparedDate { get; set; }
     }
 }

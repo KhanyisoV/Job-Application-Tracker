@@ -171,6 +171,8 @@ function viewJobDetails(jobId) {
     setName("");
     setStatus("Awaiting");
     setDescription("");
+    setCompany("");
+    setSalary("");
   })
   .catch(err => console.error(err));
 }
@@ -591,6 +593,9 @@ const getSortedApplications = () => {
               {selectedJob.interviewPreps?.map(prep => (
                 <li key={prep.id}>
                   <h4>{prep.content}</h4>
+                  <p><strong>Position:</strong> {applications.find(app => app.jobId === prep.jobApplicationId)?.name} at {applications.find(app => app.jobId === prep.jobApplicationId)?.company}</p>
+      
+                  <h3>{prep.content}</h3>
                   <p>Answer: {prep.notes}</p>
                   <button onClick={() => {
                     setActiveTab("interview-prep");

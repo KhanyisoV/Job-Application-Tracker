@@ -587,17 +587,19 @@ const getSortedApplications = () => {
           </ul>
           
           <h3>Interview Prep ({selectedJob.interviewPreps?.length || 0})</h3>
-          <ul>
-            {selectedJob.interviewPreps?.map(prep => (
-             <li key={note.id}>
-              <h3>{note.content}</h3>
-              <p><strong>Position:</strong> {applications.find(app => app.jobId === note.jobApplicationId)?.name} at {applications.find(app => app.jobId === note.jobApplicationId)?.company}</p>
-              <p>Answer: {note.notes}</p>
-              <button onClick={() => startEditPrepNote(note)}>Edit</button>
-              <button onClick={() => deletePrepNote(note.id)}>Delete</button>
-            </li>
-            ))}
-          </ul>
+            <ul>
+              {selectedJob.interviewPreps?.map(prep => (
+                <li key={prep.id}>
+                  <h4>{prep.content}</h4>
+                  <p>Answer: {prep.notes}</p>
+                  <button onClick={() => {
+                    setActiveTab("interview-prep");
+                    startEditPrepNote(prep);
+                  }}>Edit</button>
+                  <button onClick={() => deletePrepNote(prep.id)}>Delete</button>
+                </li>
+              ))}
+            </ul>
         </div>
       )}
 

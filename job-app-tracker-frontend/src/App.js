@@ -38,6 +38,8 @@ function App() {
   
  const [selectedJobId, setSelectedJobId] = useState(null);
  const [selectedJob, setSelectedJob] = useState(null);
+ const [company, setCompany] = useState("");
+ const [salary, setSalary] = useState("");
 
 
   {/* Fetch interviews on component mount */}
@@ -155,11 +157,13 @@ function viewJobDetails(jobId) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      name: name,
-      status: status,
-      jobDescription: description,
-      appliedDate: new Date().toISOString()
-    })
+    name: name,
+    status: status,
+    jobDescription: description,
+    company: company,
+    salary: salary ? parseInt(salary) : null,
+    appliedDate: new Date().toISOString()
+  })
   })
   .then(res => res.json())
   .then(data => {
@@ -188,10 +192,12 @@ function updateApplication(id) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      name: name,
-      status: status,
-      jobDescription: description
-    })
+    name: name,
+    status: status,
+    jobDescription: description,
+    company: company,
+    salary: salary ? parseInt(salary) : null
+  })
   })
   .then(() => {
     setApplications(applications.map(app => 
@@ -212,6 +218,8 @@ function startEdit(application) {
   setName(application.name);
   setStatus(application.status);
   setDescription(application.jobDescription);
+  setCompany(application.company);
+  setSalary(application.salary);
 }
 
 function cancelEdit() {
@@ -219,6 +227,8 @@ function cancelEdit() {
   setName("");
   setStatus("Awaiting");
   setDescription("");
+  setCompany("");
+  setSalary("");
 }
 
  {/* Interview section functions */}
@@ -419,12 +429,26 @@ const getSortedApplications = () => {
             value={description}
             onChange={e => setDescription(e.target.value)}
           />
+          <input
+              type="text"
+              placeholder="Company Name"
+              value={company}
+              onChange={e => setCompany(e.target.value)}
+            />
+            <input
+              type="number"
+              placeholder="Salary Offer"
+              value={salary}
+              onChange={e => setSalary(e.target.value)}
+            />
           <select value={status} onChange={e => setStatus(e.target.value)}> 
             <option value="">Select Status</option>
             <option value="Accepted">Accepted</option> 
             <option value="Rejected">Rejected</option> 
             <option value="Awaiting">Awaiting</option> 
           </select>
+
+
           
           {editingId ? (
             <>
@@ -459,6 +483,8 @@ const getSortedApplications = () => {
                 <p style={getStatusStyle(application.status)}>
                   Status: {application.status}
                 </p>
+                <p>Company: {application.company || 'N/A'}</p>
+                <p>Salary: {application.salary ? `R${application.salary.toLocaleString()}` : 'N/A'}</p>
                 <p>Applied on: {application.appliedDate ? 
                                     new Date(application.appliedDate).toLocaleDateString() : 
                                     'N/A'
@@ -549,6 +575,8 @@ const getSortedApplications = () => {
                 <p>Time: {interview.time}</p>
                 <p>Location: {interview.location}</p>
                 <p>Notes: {interview.notes}</p>
+                <p>Company: {selectedJob.company || 'N/A'}</p>
+                <p>Salary Offer: {selectedJob.salary ? `R${selectedJob.salary.toLocaleString()}` : 'N/A'}</p>
                 <button onClick={() => {
                   setActiveTab("interviews");
                   startEditInterview(interview);
@@ -561,15 +589,13 @@ const getSortedApplications = () => {
           <h3>Interview Prep ({selectedJob.interviewPreps?.length || 0})</h3>
           <ul>
             {selectedJob.interviewPreps?.map(prep => (
-              <li key={prep.id}>
-                <h4>{prep.content}</h4>
-                <p>Answer: {prep.notes}</p>
-                <button onClick={() => {
-                  setActiveTab("interview-prep");
-                  startEditPrepNote(prep);
-                }}>Edit</button>
-                <button onClick={() => deletePrepNote(prep.id)}>Delete</button>
-              </li>
+             <li key={note.id}>
+              <h3>{note.content}</h3>
+              <p><strong>Position:</strong> {applications.find(app => app.jobId === note.jobApplicationId)?.name} at {applications.find(app => app.jobId === note.jobApplicationId)?.company}</p>
+              <p>Answer: {note.notes}</p>
+              <button onClick={() => startEditPrepNote(note)}>Edit</button>
+              <button onClick={() => deletePrepNote(note.id)}>Delete</button>
+            </li>
             ))}
           </ul>
         </div>
@@ -630,14 +656,15 @@ const getSortedApplications = () => {
 
           <ul>
             {interviews.map(interview => (
-              <li key={interview.id}>
-                <h3>{new Date(interview.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h3>
-                <h4>{interview.time}</h4>
-                <p>Location: {interview.location}</p>
-                <p>Notes: {interview.notes}</p>
-                <button onClick={() => startEditInterview(interview)}>Edit</button>
-                <button onClick={() => cancelInterview(interview.id)}>Cancel</button>
-              </li>
+             <li key={interview.id}>
+              <h3>{new Date(interview.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h3>
+              <h4>{interview.time}</h4>
+              <p><strong>{applications.find(app => app.jobId === interview.jobApplicationId)?.name}</strong> at {applications.find(app => app.jobId === interview.jobApplicationId)?.company}</p>
+              <p>Location: {interview.location}</p>
+              <p>Notes: {interview.notes}</p>
+              <button onClick={() => startEditInterview(interview)}>Edit</button>
+              <button onClick={() => cancelInterview(interview.id)}>Cancel</button>
+            </li>
             ))}
           </ul>
         </div>

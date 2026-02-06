@@ -250,19 +250,15 @@ function scheduleInterview() {
     notes: interviewNotes
   })
 })
-.then(async res => {
-  const text = await res.text();
-  console.log("STATUS:", res.status);
-  console.log("RESPONSE:", text);
-
-  if (!res.ok) throw new Error(text);
-
-  return JSON.parse(text);
-})
+.then(res => res.json())
 .then(data => {
   setInterviews([...interviews, data]);
+  setInterviewDate("");
+  setInterviewTime("");
+  setInterviewLocation("");
+  setInterviewNotes("");
 })
-.catch(err => console.error("POST ERROR:", err));
+.catch(err => console.error(err));
 }
 
 function cancelInterview(id) {

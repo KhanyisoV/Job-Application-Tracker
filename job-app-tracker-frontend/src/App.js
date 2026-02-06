@@ -598,7 +598,7 @@ const getSortedApplications = () => {
                   <p><strong>Position:</strong> {applications.find(app => app.jobId === prep.jobApplicationId)?.name} at {applications.find(app => app.jobId === prep.jobApplicationId)?.company}</p>
       
                   <h3>{prep.content}</h3>
-                  <h3>Answer: {prep.notes} <br/></h3>
+                  <h3>Answer: {prep.notes} </h3> <br/>
                   <button onClick={() => {
                     setActiveTab("interview-prep");
                     startEditPrepNote(prep);

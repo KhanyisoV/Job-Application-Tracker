@@ -6,12 +6,14 @@ namespace JobApplicationTracker.Models
     {
         [Key]
         public int Id { get; set; }
-        public string? Description { get; set; }
-        public string? Location { get; set; }
-        public DateTime? InterviewDate { get; set; }
-
-        public JobApplication JobApplication { get; set; }
+        
         public int JobApplicationId { get; set; }
-        public string? InterviewType { get; set; }
+        public JobApplication JobApplication { get; set; }
+        
+        // Match frontend field names
+        public string? Date { get; set; }        // Changed from InterviewDate
+        public string? Time { get; set; }        // New field
+        public string? Location { get; set; }    // Keep as is
+        public string? Notes { get; set; }       // Changed from Description
     }
 }

@@ -43,9 +43,12 @@ namespace JobApplicationTracker.Controllers
                 return NotFound();
             }
 
-            existing.Description = interview.Description;
-            existing.InterviewDate = interview.InterviewDate;
-            existing.InterviewType = interview.InterviewType;
+            // Update to match new field names
+            existing.Date = interview.Date;
+            existing.Time = interview.Time;
+            existing.Location = interview.Location;
+            existing.Notes = interview.Notes;
+            existing.JobApplicationId = interview.JobApplicationId;
 
             _context.SaveChanges();
             return NoContent();

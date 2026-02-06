@@ -1,6 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace JobApplicationTracker.Models
 {
@@ -8,10 +6,13 @@ namespace JobApplicationTracker.Models
     {
         [Key]
         public int Id { get; set; }
-        public string? Question { get; set; }
-        public string? Answer { get; set; }
-        public DateTime? PreparedDate { get; set; }
+
         public int JobApplicationId { get; set; }
         public JobApplication JobApplication { get; set; }
+
+        // Match frontend field names
+        public string? Content { get; set; }  // Changed from Question
+        public string? Notes { get; set; }    // Changed from Answer
+        public DateTime PreparedDate { get; set; }
     }
 }

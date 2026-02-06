@@ -18,9 +18,7 @@ namespace JobApplicationTracker.Data
         {
             modelBuilder.Entity<JobApplication>().Property(j => j.Status).HasConversion<string>();
 
-            modelBuilder.Entity<Interview>().Property(i => i.Notes).HasConversion<string>();
-
-            modelBuilder.Entity<InterviewPrep>().Property(ip => ip.Question).HasMaxLength(500);
+            modelBuilder.Entity<InterviewPrep>().Property(ip => ip.Content).HasMaxLength(500);
 
             modelBuilder
                 .Entity<Interview>()

@@ -80,8 +80,9 @@ namespace JobApplicationTracker.Controllers
                 return NotFound();
             }
 
-            existing.Question = interviewPrep.Question;
-            existing.Answer = interviewPrep.Answer;
+            // Update field names to match model
+            existing.Content = interviewPrep.Content;
+            existing.Notes = interviewPrep.Notes;
             existing.PreparedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();

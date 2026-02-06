@@ -546,7 +546,7 @@ const getSortedApplications = () => {
             {savedNotes.map(note => (
               <li key={note.id}>
                 <h3>{note.content}</h3>
-                <p>Answer: {note.notes}</p> <br />
+                <p>Answer: {note.notes}</p>
                 <button onClick={() => startEditPrepNote(note)}>Edit</button>
                 <button onClick={() => deletePrepNote(note.id)}>Delete</button>
               </li>
@@ -575,6 +575,7 @@ const getSortedApplications = () => {
                 <h2>Company: {selectedJob.company || 'N/A'}</h2>
                 <p>{new Date(interview.date).toLocaleDateString()}</p>
                 <p>Time: {interview.time}</p>
+                <p><strong>Position:</strong> {applications.find(app => app.jobId === interview.jobApplicationId)?.name}</p>
                 <p>Location: {interview.location}</p>
                 <p>Notes: {interview.notes}</p>
                 
@@ -665,9 +666,10 @@ const getSortedApplications = () => {
           <ul>
             {interviews.map(interview => (
              <li key={interview.id}>
-              <h3>{new Date(interview.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h3>
+              <h2>Company: {applications.find(app => app.jobId === interview.jobApplicationId)?.company || 'N/A'}</h2>
+              <h4>{new Date(interview.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h4>
               <h4>{interview.time}</h4>
-              <p><strong>{applications.find(app => app.jobId === interview.jobApplicationId)?.name}</strong> at {applications.find(app => app.jobId === interview.jobApplicationId)?.company}</p>
+              <p><strong>{applications.find(app => app.jobId === interview.jobApplicationId)?.name}</strong></p>
               <p>Location: {interview.location}</p>
               <p>Notes: {interview.notes}</p>
               <button onClick={() => startEditInterview(interview)}>Edit</button>

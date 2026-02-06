@@ -573,7 +573,7 @@ const getSortedApplications = () => {
           <ul>
             {selectedJob.interviews?.map(interview => (
               <li key={interview.id}>
-                <h4>Company: {selectedJob.company || 'N/A'}</h4>
+                <h3>Company: {selectedJob.company || 'N/A'}</h3>
                 <p>{new Date(interview.date).toLocaleDateString()}</p>
                 <p>Time: {interview.time}</p>
                 <p>Location: {interview.location}</p>
@@ -598,7 +598,7 @@ const getSortedApplications = () => {
                   <p><strong>Position:</strong> {applications.find(app => app.jobId === prep.jobApplicationId)?.name} at {applications.find(app => app.jobId === prep.jobApplicationId)?.company}</p>
       
                   <h4>{prep.content}</h4>
-                  <h5>Answer: {prep.notes}</h5>
+                  <p>Answer: {prep.notes}</p>
                   <button onClick={() => {
                     setActiveTab("interview-prep");
                     startEditPrepNote(prep);

@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 
 namespace JobApplicationTracker.Models
 {
@@ -8,6 +10,8 @@ namespace JobApplicationTracker.Models
         public int Id { get; set; }
 
         public int JobApplicationId { get; set; }
+
+        [JsonIgnore]
         public JobApplication? JobApplication { get; set; }
 
         // Match frontend field names

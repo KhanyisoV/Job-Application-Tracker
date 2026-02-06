@@ -227,7 +227,16 @@ function scheduleInterview() {
     alert("Please select a job application first");
     return;
   }
-  
+
+
+  console.log({
+  jobApplicationId: selectedJobId,
+  date: interviewDate,
+  time: interviewTime,
+  location: interviewLocation,
+  notes: interviewNotes
+});
+
   fetch(apiInterviewUrl, {
     method: "POST",
     headers: {

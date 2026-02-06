@@ -29,10 +29,10 @@ namespace JobApplicationTracker.Controllers
         [HttpGet("{id}")]
         public IActionResult GetJobApplication(int id)
         {
-            var jobApplication = _context
-                .JobApplications.Include(j => j.Interviews)
-                .Include(j => j.InterviewPreps)
-                .FirstOrDefault(j => j.JobId == id);
+            var jobApplication = _context.JobApplications
+            .Include(j => j.Interviews)
+            .Include(j => j.InterviewPreps)
+            .FirstOrDefault(j => j.JobId == id);
 
             if (jobApplication == null)
             {

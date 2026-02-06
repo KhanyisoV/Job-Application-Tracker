@@ -8,7 +8,7 @@ namespace JobApplicationTracker.Models
         public int Id { get; set; }
 
         public int JobApplicationId { get; set; }
-        public JobApplication JobApplication { get; set; }
+        public JobApplication? JobApplication { get; set; }
 
         // Match frontend field names
         public string? Date { get; set; } // Changed from InterviewDate

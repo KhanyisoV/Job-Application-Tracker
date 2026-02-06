@@ -573,11 +573,12 @@ const getSortedApplications = () => {
           <ul>
             {selectedJob.interviews?.map(interview => (
               <li key={interview.id}>
-                <h4>{new Date(interview.date).toLocaleDateString()}</h4>
+                <h4>Company: {selectedJob.company || 'N/A'}</h4>
+                <p>{new Date(interview.date).toLocaleDateString()}</p>
                 <p>Time: {interview.time}</p>
                 <p>Location: {interview.location}</p>
                 <p>Notes: {interview.notes}</p>
-                <p>Company: {selectedJob.company || 'N/A'}</p>
+                
                 <p>Salary Offer: {selectedJob.salary ? `R${selectedJob.salary.toLocaleString()}` : 'N/A'}</p>
                 <button onClick={() => {
                   setActiveTab("interviews");
@@ -592,11 +593,12 @@ const getSortedApplications = () => {
             <ul>
               {selectedJob.interviewPreps?.map(prep => (
                 <li key={prep.id}>
-                  <h4>{prep.content}</h4>
+                  
+                  <h3>Company: {selectedJob.company || 'N/A'}</h3>
                   <p><strong>Position:</strong> {applications.find(app => app.jobId === prep.jobApplicationId)?.name} at {applications.find(app => app.jobId === prep.jobApplicationId)?.company}</p>
       
-                  <h3>{prep.content}</h3>
-                  <p>Answer: {prep.notes}</p>
+                  <h4>{prep.content}</h4>
+                  <h5>Answer: {prep.notes}</h5>
                   <button onClick={() => {
                     setActiveTab("interview-prep");
                     startEditPrepNote(prep);

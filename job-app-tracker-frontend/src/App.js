@@ -493,8 +493,7 @@ const getSortedApplications = () => {
                                 }</p>
                 <button onClick={() => startEdit(application)}>Edit</button>
                 <button onClick={() => deleteApplication(application.jobId)}>Delete</button>
-                {/* ADD THIS NEW BUTTON: */}
-                <button onClick={() => viewJobDetails(application.jobId)}>View Details</button>
+                <button onClick={() => viewJobDetails(application.jobId)}>Details</button>
               </li>
             ))}
           </ul>
@@ -547,7 +546,7 @@ const getSortedApplications = () => {
             {savedNotes.map(note => (
               <li key={note.id}>
                 <h3>{note.content}</h3>
-                <p>Answer: {note.notes}</p>
+                <p>Answer: {note.notes}</p> <br />
                 <button onClick={() => startEditPrepNote(note)}>Edit</button>
                 <button onClick={() => deletePrepNote(note.id)}>Delete</button>
               </li>
@@ -573,7 +572,7 @@ const getSortedApplications = () => {
           <ul>
             {selectedJob.interviews?.map(interview => (
               <li key={interview.id}>
-                <h3>Company: {selectedJob.company || 'N/A'}</h3>
+                <h2>Company: {selectedJob.company || 'N/A'}</h2>
                 <p>{new Date(interview.date).toLocaleDateString()}</p>
                 <p>Time: {interview.time}</p>
                 <p>Location: {interview.location}</p>
@@ -594,11 +593,11 @@ const getSortedApplications = () => {
               {selectedJob.interviewPreps?.map(prep => (
                 <li key={prep.id}>
                   
-                  <h3>Company: {selectedJob.company || 'N/A'}</h3>
+                  <h2>Company: {selectedJob.company || 'N/A'}</h2>
                   <p><strong>Position:</strong> {applications.find(app => app.jobId === prep.jobApplicationId)?.name} at {applications.find(app => app.jobId === prep.jobApplicationId)?.company}</p>
       
-                  <h4>{prep.content}</h4>
-                  <p>Answer: {prep.notes}</p>
+                  <h3>{prep.content}</h3>
+                  <h3>Answer: {prep.notes}</h3>
                   <button onClick={() => {
                     setActiveTab("interview-prep");
                     startEditPrepNote(prep);

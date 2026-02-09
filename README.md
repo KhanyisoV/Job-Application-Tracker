@@ -18,6 +18,28 @@ Deleting applications
 
 The application follows a frontend + backend + database architecture and exposes a RESTful API consumed by a React frontend.
 
+### Features
+- **Real-time Job Search**: Search for jobs by keywords and location across South Africa
+- **Direct Integration**: Save job listings directly to your applications with pre-filled details
+- **Comprehensive Results**: View job title, company, location, salary range, and description
+- **External Links**: Quick access to full job postings on external sites
+
+### How It Works
+1. Navigate to the **Job Search** tab
+2. Enter job title/keywords (e.g., "Software Engineer", "Data Analyst")
+3. Specify location (e.g., "Cape Town", "Johannesburg")
+4. Browse up to 20 matching results
+5. Click **Save to Applications** to add a job directly to your tracker
+6. Click **View Job** to open the full listing on the employer's site
+
+### API Details
+- **Provider**: Adzuna API
+- **Region**: South Africa (ZA)
+- **Results per search**: 20
+- **Data returned**: Job title, company name, location, salary range, description, posting date, and redirect URL
+
+This feature streamlines the job application process by eliminating manual data entry and keeping all opportunities in one centralized location.
+
 # 🏗️ Tech Stack
 Backend
 
@@ -73,17 +95,39 @@ POST	/api/jobs	Create a new job application
 PUT	/api/jobs/{id}	Update an existing job application
 DELETE	/api/jobs/{id}	Delete a job application
 
+### External API Integration
+Adzuna Job Search API | Fetch real-time job listings | `https://api.adzuna.com/v1/api/jobs/za/search/1` 
+
 # 🗃️ Data Model
 
-Each job application contains:
+### Job Application
+- Company name
+- Position title
+- Job description
+- Application status (Accepted, Rejected, Awaiting)
+- Salary offer
+- Date applied
 
-Company name
+### Interview
+- Associated job application (foreign key)
+- Interview date
+- Interview time
+- Location
+- Notes
 
-Position title
+### Interview Preparation
+- Associated job application (foreign key)
+- Preparation questions
+- Answers/notes
 
-Application status (Applied, Interview, Offer, Rejected)
-
-Date applied
+### External Job Search Results (Adzuna)
+- Job title
+- Company name
+- Location
+- Salary range (min/max)
+- Job description
+- Posted date
+- External application URL
 
 # ⚙️ Requirements
 Backend

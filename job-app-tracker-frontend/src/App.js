@@ -562,8 +562,10 @@ const getSortedApplications = () => {
               <li key={note.id}>
                 <h3>{note.content}</h3>
                 <p>Answer: {note.notes}</p>
-                <button onClick={() => startEditPrepNote(note)}>Edit</button>
-                <button onClick={() => deletePrepNote(note.id)}>Delete</button>
+                <div className="button-container">
+                  <button onClick={() => startEditPrepNote(note)}>Edit</button>
+                  <button onClick={() => deletePrepNote(note.id)}>Delete</button>
+                </div>
               </li>
             ))}
           </ul>

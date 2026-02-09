@@ -530,7 +530,7 @@ const getSortedApplications = () => {
             <option value="">Select Job Application</option>
             {applications.map(app => (
               <option key={app.jobId} value={app.jobId}>
-                {app.name}
+                {app.name} ({app.company || 'No Company'})
               </option>
             ))}
           </select>
@@ -641,7 +641,7 @@ const getSortedApplications = () => {
             <option value="">Select Job Application</option>
             {applications.map(app => (
               <option key={app.jobId} value={app.jobId}>
-                {app.name}
+                {app.name} ({app.company || 'No Company'})
               </option>
             ))}
           </select>

@@ -1,6 +1,7 @@
 import {useEffect , useState} from "react";
 import './App.css';
 
+
 function App() {
 
   {/*For The jobapplication Tracker dashboard */}
@@ -41,6 +42,20 @@ function App() {
  const [company, setCompany] = useState("");
  const [salary, setSalary] = useState("");
 
+
+ useEffect(() => {
+  document.body.style.backgroundImage = `url(${process.env.PUBLIC_URL}/background.jpg)`;
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundPosition = 'center';
+  document.body.style.backgroundAttachment = 'fixed';
+  document.body.style.backgroundRepeat = 'no-repeat';
+  document.body.style.position = 'relative';
+  document.body.style.minHeight = '100vh';
+  
+  return () => {
+    document.body.style.backgroundImage = '';
+  };
+}, []);
 
   {/* Fetch interviews on component mount */}
   useEffect(() => {

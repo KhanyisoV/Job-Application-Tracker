@@ -71,16 +71,18 @@ p {
 
 /* Tab Navigation */
 .tab-navigation {
-  max-width: 500px;
+  max-width: 700px;
   margin: 3rem auto 2rem;
   display: flex;
   gap: 0;
   border-bottom: 1px solid #e0e0e0;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .tab-button {
-  flex: 1;
-  padding: 1rem 2rem;
+  flex: 1 1 auto;
+  padding: 1rem 1.5rem;
   border: none;
   background: transparent;
   color: #999;
@@ -94,6 +96,7 @@ p {
   border-bottom: 2px solid transparent;
   margin: 0;
   border-radius: 0;
+  min-width: 120px;
 }
 
 .tab-button:hover {
@@ -349,8 +352,10 @@ ul:empty::after {
   }
 
   .tab-button {
-    padding: 0.875rem 1rem;
-    font-size: 0.85rem;
+  padding: 0.75rem 0.875rem;
+  font-size: 0.75rem;
+  min-width: auto;
+  flex: 1 1 auto;
   }
 
   ul {

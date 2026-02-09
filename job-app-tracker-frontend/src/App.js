@@ -4,6 +4,12 @@ import './App.css';
 
 function App() {
 
+  {/*for Job Search*/}
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchLocation, setSearchLocation] = useState("south africa");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+
   {/*For The jobapplication Tracker dashboard */}
   const apiUrl = "https://jobtracker-backend-f7bxc9fyg4htendh.southafricanorth-01.azurewebsites.net/api/JobApplication";
 
@@ -386,6 +392,46 @@ const getSortedApplications = () => {
   return sorted;
 };
 
+// Job Search Function
+async function searchJobs() {
+  if (!searchQuery.trim()) {
+    alert("Please enter a job title or keyword");
+    return;
+  }
+
+  setIsSearching(true);
+  
+  const appId = "1e1ed82e";
+  const apiKey = "3d4261c31057bfaa649c9c72f97d88ee";
+  const country = "za"; // South Africa
+  
+  // Format location for API (replace spaces with %20)
+  const location = searchLocation.replace(/\s+/g, '%20');
+  const query = searchQuery.replace(/\s+/g, '%20');
+  
+  const url = `https://api.adzuna.com/v1/api/jobs/${country}/search/1?app_id=${appId}&app_key=${apiKey}&results_per_page=20&what=${query}&where=${location}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    setSearchResults(data.results || []);
+    setIsSearching(false);
+  } catch (error) {
+    console.error("Error fetching jobs:", error);
+    alert("Failed to fetch jobs. Please try again.");
+    setIsSearching(false);
+  }
+}
+
+function saveJobToApplications(job) {
+  setName(job.title);
+  setCompany(job.company.display_name);
+  setDescription(job.description);
+  setSalary(job.salary_max || "");
+  setActiveTab("applications");
+  window.scrollTo(0, 0);
+}
+
   return (
     <div className="App">
       <h1>Job Application Tracker</h1>
@@ -394,6 +440,13 @@ const getSortedApplications = () => {
       
       {/* Tab Navigation */}
       <div className="tab-navigation">
+
+        <button 
+          className={`tab-button ${activeTab === "job-search" ? "active" : ""}`}
+          onClick={() => setActiveTab("job-search")}
+        >
+          Job Search
+        </button>
 
         <button 
           className={`tab-button ${activeTab === "job-details" ? "active" : ""}`}
@@ -514,6 +567,90 @@ const getSortedApplications = () => {
           </ul>
         </div>
       )}
+
+      {/* Job Search Tab */}
+{activeTab === "job-search" && (
+  <div className="tab-content">
+    <h2>Search for Jobs</h2>
+    <p>Find jobs from Adzuna and save them to your applications</p>
+
+    <input
+      type="text"
+      placeholder="Job title or keywords (e.g., Software Engineer)"
+      value={searchQuery}
+      onChange={e => setSearchQuery(e.target.value)}
+    />
+    
+    <input
+      type="text"
+      placeholder="Location (e.g., Cape Town, Johannesburg)"
+      value={searchLocation}
+      onChange={e => setSearchLocation(e.target.value)}
+    />
+
+    <button onClick={searchJobs} disabled={isSearching}>
+      {isSearching ? "Searching..." : "Search Jobs"}
+    </button>
+
+    {searchResults.length > 0 && (
+      <div className="sort-container">
+        <p style={{color: '#666', fontSize: '0.9rem'}}>
+          Found {searchResults.length} jobs
+        </p>
+      </div>
+    )}
+
+    <ul>
+      {searchResults.map((job, index) => (
+        <li key={index}>
+          <h3>{job.title}</h3>
+          <h4>{job.company.display_name}</h4>
+          <p style={{
+            background: 'rgba(59, 130, 246, 0.1)',
+            borderColor: 'rgba(59, 130, 246, 0.3)',
+            color: '#1e40af'
+          }}>
+            {job.location.display_name}
+          </p>
+          {job.salary_min && job.salary_max && (
+            <p>Salary: R{job.salary_min.toLocaleString()} - R{job.salary_max.toLocaleString()}</p>
+          )}
+          <p style={{
+            textAlign: 'left',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical'
+          }}>
+            {job.description.replace(/<[^>]*>/g, '').substring(0, 200)}...
+          </p>
+          <p style={{fontSize: '0.75rem', color: '#999'}}>
+            Posted: {new Date(job.created).toLocaleDateString()}
+          </p>
+          
+          <div className="button-container">
+            <button onClick={() => saveJobToApplications(job)}>
+              Save to Applications
+            </button>
+            <button 
+              onClick={() => window.open(job.redirect_url, '_blank')}
+              style={{background: 'white', color: '#1a1a1a', borderColor: '#1a1a1a'}}
+            >
+              View Job
+            </button>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    {searchResults.length === 0 && !isSearching && (
+      <div style={{textAlign: 'center', padding: '4rem 2rem', color: '#999'}}>
+        Search for jobs to see results here
+      </div>
+    )}
+  </div>
+)}
 
       {/* Interview Prep Tab */}
       {activeTab === "interview-prep" && (
